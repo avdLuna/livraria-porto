@@ -24,5 +24,12 @@ O link do deploy da aplicação está disponível aqui.
 * [Spring Boot](https://spring.io/projects/spring-boot) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 
+## Authors
 
+* **Amanda Luna** - [avdluna](https://github.com/avdluna)
+* **Hiago Fernandes** - [hiagonfs](https://github.com/hiagonfs)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
