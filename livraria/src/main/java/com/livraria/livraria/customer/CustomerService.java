@@ -13,7 +13,8 @@ public class CustomerService {
 
     @Autowired
     CustomerRepository customerRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private Validator validator = new Validator();
 
     public Customer create(Customer customer) throws ValidatorException {

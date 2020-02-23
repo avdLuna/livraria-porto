@@ -16,14 +16,15 @@ public class LoginController {
     private CustomerService customerService;
     @Autowired
     private JwtService jwtService;
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @RequestMapping("/auth/login")
     public LoginResponse auth(@RequestBody Customer customer){
         try {
             Customer customerAux = this.customerService.getCustomerByEmail(customer.getEmail());
-            if(!this.bCryptPasswordEncoder.matches(customerAux.getPassword(), customer.getPassword()))
+            if(!bCryptPasswordEncoder.matches(customer.getPassword(), customerAux.getPassword())){
                 throw new ServletException("Invalid password");
+            }
         } catch (ValidatorException | ServletException e) {
             e.printStackTrace();
         }
