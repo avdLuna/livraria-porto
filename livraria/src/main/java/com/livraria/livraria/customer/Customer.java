@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.livraria.livraria.util.CustomerRole;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "customers")
@@ -30,6 +32,9 @@ public class Customer implements Serializable {
     }
 
     public Customer() {
+    }
+
+    public Customer(String email, String toLowerCase, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, List<GrantedAuthority> authorities) {
     }
 
     public CustomerRole getRole() {
