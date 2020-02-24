@@ -1,7 +1,10 @@
 package com.livraria.livraria.books;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
+@Document(collection = "books")
 public class Book {
     private String id;
     private String title;
