@@ -22,13 +22,13 @@ public class JwtFilter extends GenericFilterBean {
         String header = req.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
-            throw new ServletException("Token inexistente ou mal formatado!");
+            throw new ServletException("Non existent or badly formatted Token ");
         }
 
         String token = header.substring(TOKEN_INDEX);
 
         try {
-            Jwts.parser().setSigningKey("minha_senha").parseClaimsJws(token).getBody();
+            Jwts.parser().setSigningKey("passsecret").parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }

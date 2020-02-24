@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,22 @@ public class CustomerService {
             return customerRepository.findByEmail(email);
         } else {
             throw new ValidatorException("Emails doesn`t exists");
+        }
+    }
+
+    public List<Customer> getAllCustomers() throws ValidatorException {
+       List<Customer> customers = customerRepository.findAll();
+       if(customers.isEmpty()){
+           throw new NullPointerException("No registered users");
+       }
+       return customers;
+    }
+
+    public Optional<Customer> getCustomerById(String id) throws ValidatorException {
+        if(validator.validString(id)){
+            return customerRepository.findById(id);
+        } else {
+            throw new ValidatorException("Customer does`t exists");
         }
     }
 

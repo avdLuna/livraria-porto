@@ -1,6 +1,7 @@
 package com.livraria.livraria.customer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.livraria.livraria.books.Book;
 import com.livraria.livraria.util.CustomerRole;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,6 +25,8 @@ public class Customer implements Serializable {
     private String password;
     @JsonProperty(value = "role")
     private CustomerRole role;
+
+    private List<Book> books;
 
     public Customer(String name, String email, String password) {
         this.name = name;
@@ -77,6 +80,14 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -85,6 +96,7 @@ public class Customer implements Serializable {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
+                ", books=" + books +
                 '}';
     }
 
@@ -93,11 +105,12 @@ public class Customer implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return id.equals(customer.id);
+        return id.equals(customer.id) &&
+                email.equals(customer.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, email);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 public class CustomerController {
@@ -30,14 +30,25 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/customer/get")
-    public ResponseEntity<Customer> getUser(@RequestHeader("Authorization") String header) throws ValidatorException, ServletException {
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<Customer> getCustomer(@RequestHeader("Authorization") String header, @PathVariable("id") String id) throws ValidatorException, ServletException {
         String email = jwtService.recoverSubjectFromToken(header);
         if(!customerService.userEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            Customer customer =  customerService.getCustomerByEmail(email);
+            Customer customer =  customerService.getCustomerById(id).get();
             return new ResponseEntity<>(customer, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/customer/all")
+    public ResponseEntity<List<Customer>> getAllCustomers(@RequestHeader("Authorization") String header) throws ValidatorException, ServletException {
+        String email = jwtService.recoverSubjectFromToken(header);
+        if(!customerService.userEmailExists(email)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            List<Customer> customers =  customerService.getAllCustomers();
+            return new ResponseEntity<>(customers, HttpStatus.OK);
         }
     }
 
