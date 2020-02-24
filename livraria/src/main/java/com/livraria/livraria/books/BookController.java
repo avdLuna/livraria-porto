@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,14 @@ public class BookController {
         if(!customerService.userEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            List<Book> books = bookService.searchByName(book.getTitle());
+            List<Book> books;
+            if(!book.getTitle().isEmpty() && !book.getAuthors().isEmpty()){
+               books = bookService.searchByNameAndAuthor(book.getTitle(), book.getAuthors().get(0));
+            } else if(book.getTitle().isEmpty()){
+                books = bookService.searchByAuthor(book.getAuthors().get(0));
+            } else {
+                books = bookService.searchByName(book.getTitle());
+            }
             return new ResponseEntity<>(books, HttpStatus.OK);
         }
     }
