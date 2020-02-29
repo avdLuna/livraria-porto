@@ -42,8 +42,8 @@ public class BookCrawler {
     }
 
     public String getBooksById(String id){
-        byte[] decodedBytes = Base64.getDecoder().decode(id);
-        String decodedString = new String(decodedBytes);
+        byte[] decodedBytesId = Base64.getDecoder().decode(id);
+        String decodedString = new String(decodedBytesId);
         String url = BOOK_API_LINK + "id=" + id + "&key=" + API_KEY;
         return this.restTemplate.getForObject(url, String.class);
     }
