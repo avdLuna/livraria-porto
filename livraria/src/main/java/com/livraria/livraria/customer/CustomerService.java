@@ -60,6 +60,23 @@ public class CustomerService {
         }
     }
 
+    public Customer update(String id, Customer user)  throws ValidatorException {
+        Optional<Customer> customerData = customerRepository.findById(id);
+        if (customerData.isPresent()) {
+            Customer customerUser = validUpdate(customerData.get(), user);
+            if (customerUser != null) {
+                if (!customerUser.getEmail().equals(user.getEmail()) || customerUser.getId() != user.getId()) {
+                    return null;
+                } else {
+                    return customerRepository.save(customerUser);
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
     private Customer validCreate(Customer customer)  throws ValidatorException {
         if (validator.validString(customer.getName()) && validator.validEmail(customer.getEmail())
                 && validator.validPassword(customer.getPassword())) {
@@ -73,6 +90,20 @@ public class CustomerService {
             }
         } else {
             return null;
+        }
+    }
+
+    private Customer validUpdate(Customer customer, Customer customerUpdate)  throws ValidatorException{
+        if (validator.validString(customerUpdate.getName()) && validator.validEmail(customerUpdate.getEmail())
+                && validator.validPassword(customerUpdate.getPassword())) {
+            customer.setName(customerUpdate.getName());
+            customer.setPassword(customerUpdate.getPassword());
+            customer.setRole(customerUpdate.getRole());
+            customer.setEmail(customerUpdate.getEmail());
+            return customer;
+
+        } else {
+            throw new ValidatorException("Email alread exists");
         }
 
     }
