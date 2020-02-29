@@ -76,4 +76,10 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.addBookCollection(email, bSearch), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/customer/removeBook")
+    public ResponseEntity<Book> removeBook(@RequestHeader("Authorization") String header, @PathVariable("id") String id) throws ServletException, JsonProcessingException, ValidatorException {
+        String email = jwtService.recoverSubjectFromToken(header);
+        return new ResponseEntity<>(customerService.removeBookUser(email, id), HttpStatus.OK);
+    }
+
 }

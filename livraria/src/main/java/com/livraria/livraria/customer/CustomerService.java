@@ -3,6 +3,7 @@ package com.livraria.livraria.customer;
 import com.livraria.livraria.books.Book;
 import com.livraria.livraria.util.Validator;
 import com.livraria.livraria.util.ValidatorException;
+import jdk.nashorn.internal.runtime.OptimisticReturnFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -111,4 +112,18 @@ public class CustomerService {
         customer.getBooks().add(book);
         return book;
     }
+
+    public Book removeBookUser(String email, String id) throws ValidatorException {
+        Book bSelected = null;
+        Customer customer = getCustomerByEmail(email);
+        List<Book> booksCustomer = customer.getBooks();
+        for(int i = 0; i < booksCustomer.size(); i++) {
+            if(booksCustomer.get(i).getId().equals(id)) {
+                bSelected = booksCustomer.get(i);
+                booksCustomer.remove(i);
+            }
+        }
+        return bSelected;
+    }
+
 }
