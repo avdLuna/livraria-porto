@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class Customer implements Serializable {
     @JsonProperty(value = "role")
     private CustomerRole role;
 
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
     public Customer(String name, String email, String password) {
         this.name = name;

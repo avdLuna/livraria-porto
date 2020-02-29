@@ -109,6 +109,7 @@ public class CustomerService {
     public Book addBookCollection(String email, Book book) throws ValidatorException {
         Customer customer = getCustomerByEmail(email);
         customer.getBooks().add(book);
+        customerRepository.save(customer);
         return book;
     }
 }

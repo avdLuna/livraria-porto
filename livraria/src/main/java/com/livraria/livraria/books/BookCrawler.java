@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Base64;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -41,11 +42,11 @@ public class BookCrawler {
         return this.restTemplate.getForObject(url, List.class);
     }
 
-    public String getBooksById(String id){
-        byte[] decodedBytesId = Base64.getDecoder().decode(id);
-        String decodedString = new String(decodedBytesId);
-        String url = BOOK_API_LINK + "id=" + id + "&key=" + API_KEY;
-        return this.restTemplate.getForObject(url, String.class);
+    public String getBooksById(String id) throws UnsupportedEncodingException, JsonProcessingException {
+       String URLEncoded = URLEncoder.encode(id, "UTF-8");
+        String url = BOOK_API_LINK + "id=" + URLEncoded + "&key=" + API_KEY;
+        String result = this.restTemplate.getForObject(url, String.class);
+        return result;
     }
 
 }

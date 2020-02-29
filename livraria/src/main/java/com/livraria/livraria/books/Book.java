@@ -1,11 +1,13 @@
 package com.livraria.livraria.books;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Document(collection = "books")
 public class Book {
+
     private String id;
     private String title;
     private String subtitle;
@@ -16,7 +18,7 @@ public class Book {
     private List<IndustryIdentifiers> industryIdentifiers;
     private int pageCount;
     private String language;
-    private List<String> imageLinks;
+    private ImageLinks imageLinks;
     private float price;
 
     public Book() {
@@ -32,7 +34,7 @@ public class Book {
                 List<IndustryIdentifiers> industryIdentifiers,
                 int pageCount,
                 String language,
-                List<String> imageLinks) {
+                ImageLinks imageLinks) {
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
@@ -43,7 +45,7 @@ public class Book {
         this.industryIdentifiers = industryIdentifiers;
         this.pageCount = pageCount;
         this.language = language;
-        this.imageLinks = imageLinks;
+       this.imageLinks = imageLinks;
     }
 
     public String getId() {
@@ -126,11 +128,11 @@ public class Book {
         this.language = language;
     }
 
-    public List<String> getImageLinks() {
+    public ImageLinks getImageLinks() {
         return imageLinks;
     }
 
-    public void setImageLinks(List<String> imageLinks) {
+    public void setImageLinks(ImageLinks imageLinks) {
         this.imageLinks = imageLinks;
     }
 

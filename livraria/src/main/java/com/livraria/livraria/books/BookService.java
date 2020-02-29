@@ -1,17 +1,16 @@
 package com.livraria.livraria.books;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.livraria.livraria.util.Validator;
 import com.livraria.livraria.util.ValidatorException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class BookService {
@@ -42,25 +41,22 @@ public class BookService {
         }
     }
 
-    public Book searchById(String id) throws JsonProcessingException {
+    public Book searchById(String id) throws JsonProcessingException, UnsupportedEncodingException {
         String infoBook = this.crawler.getBooksById(id);
-        List<String> infoJson = retrievesBookString(infoBook);
-        return convertJsonToBook(infoJson);
-    }
+        JsonParser parser = new JsonParser();
+        JsonElement volumeInfo = parser.parse(infoBook).getAsJsonObject()
+                            .get("items").getAsJsonArray()
+                            .get(0).getAsJsonObject()
+                            .get("volumeInfo");
+        System.out.println(volumeInfo.toString());
 
-    public Book convertJsonToBook(List<String> json) {
-        Gson gson = new Gson();
-        Book book = gson.fromJson(json.get(0), Book.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Book book = objectMapper.readValue(volumeInfo.toString(),Book.class);
+        book.setId(id);
+        System.out.println(book.toString());
+
         return book;
     }
-
-    public List<String> retrievesBookString(String infos) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        Map<String, Object> jsonMap = mapper.readValue(infos, new TypeReference<Map<String,Object>>(){});
-
-        return (List<String>) jsonMap.get("items");
-    }
-
 
 }

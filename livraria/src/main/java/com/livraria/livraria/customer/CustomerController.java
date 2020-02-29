@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -69,10 +70,10 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("/customer/addBook/{id}")
-    public ResponseEntity<Book> addBookToCollection(@RequestHeader("Authorization") String header, @PathVariable("id") String id) throws ServletException, JsonProcessingException, ValidatorException {
+    @PostMapping("/customer/addBook")
+    public ResponseEntity<Book> addBookToCollection(@RequestHeader("Authorization") String header, @RequestBody Book book) throws ServletException, JsonProcessingException, ValidatorException, UnsupportedEncodingException {
         String email = jwtService.recoverSubjectFromToken(header);
-        Book bSearch = bookService.searchById(id);
+        Book bSearch = bookService.searchById(book.getId());
         return new ResponseEntity<>(customerService.addBookCollection(email, bSearch), HttpStatus.CREATED);
     }
 

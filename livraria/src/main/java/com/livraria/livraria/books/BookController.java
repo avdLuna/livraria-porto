@@ -29,9 +29,9 @@ public class BookController {
         if(!customerService.customerEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            List<Book> books;
+            List<Book> books = null;
             if(!book.getTitle().isEmpty() && book.getAuthors() != null){
-               books = bookService.searchByNameAndAuthor(book.getTitle(), book.getAuthors().get(0));
+              books = bookService.searchByNameAndAuthor(book.getTitle(), book.getAuthors().get(0));
             } else if(book.getTitle().isEmpty()){
                 books = bookService.searchByAuthor(book.getAuthors().get(0));
             } else {
