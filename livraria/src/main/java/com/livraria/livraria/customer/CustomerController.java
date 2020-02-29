@@ -33,7 +33,7 @@ public class CustomerController {
     @GetMapping("/customer/{id}")
     public ResponseEntity<Customer> getCustomer(@RequestHeader("Authorization") String header, @PathVariable("id") String id) throws ValidatorException, ServletException {
         String email = jwtService.recoverSubjectFromToken(header);
-        if(!customerService.userEmailExists(email)){
+        if(!customerService.customerEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             Customer customer =  customerService.getCustomerById(id).get();
@@ -41,10 +41,22 @@ public class CustomerController {
         }
     }
 
+    @PutMapping("/customer/{id}")
+    public ResponseEntity<Customer> updateCustomer(@RequestHeader("Authorization") String header, @PathVariable("id") String id, @RequestBody Customer customer) throws ValidatorException, ServletException {
+        String email = jwtService.recoverSubjectFromToken(header);
+        Customer customerAux = customerService.getCustomerByEmail(email);
+        if(!customerService.customerEmailExists(email) && !customerAux.getEmail().equals(email)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            Customer customerRes =  customerService.update(customerAux.getId(), customer);
+            return new ResponseEntity<>(customerRes, HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/customer/all")
     public ResponseEntity<List<Customer>> getAllCustomers(@RequestHeader("Authorization") String header) throws ValidatorException, ServletException {
         String email = jwtService.recoverSubjectFromToken(header);
-        if(!customerService.userEmailExists(email)){
+        if(!customerService.customerEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             List<Customer> customers =  customerService.getAllCustomers();

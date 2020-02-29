@@ -34,7 +34,7 @@ public class JwtService {
 
     public boolean customerExists(String authorizationHeader) throws ServletException, ValidatorException {
         String email = recoverSubjectFromToken(authorizationHeader);
-        return customerService.userEmailExists(email);
+        return customerService.customerEmailExists(email);
     }
 
     public boolean customerHasPermission(String authorizationHeader, String email) throws ServletException, ValidatorException {
