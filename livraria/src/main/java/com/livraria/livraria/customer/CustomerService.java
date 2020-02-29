@@ -27,7 +27,7 @@ public class CustomerService {
         return customerAux;
     }
 
-    public boolean userEmailExists(String email) {
+    public boolean customerEmailExists(String email) {
         Iterable<Customer> customersIterator = customerRepository.findAll();
         for (Customer customer : customersIterator) {
             if (customer.getEmail().equals(email)) {
@@ -61,16 +61,12 @@ public class CustomerService {
         }
     }
 
-    public Customer update(String id, Customer user)  throws ValidatorException {
+    public Customer update(String id, Customer customer)  throws ValidatorException {
         Optional<Customer> customerData = customerRepository.findById(id);
         if (customerData.isPresent()) {
-            Customer customerUser = validUpdate(customerData.get(), user);
+            Customer customerUser = validUpdate(customerData.get(), customer);
             if (customerUser != null) {
-                if (!customerUser.getEmail().equals(user.getEmail()) || customerUser.getId() != user.getId()) {
-                    return null;
-                } else {
-                    return customerRepository.save(customerUser);
-                }
+                return customerRepository.save(customerUser);
             } else {
                 return null;
             }
@@ -81,7 +77,7 @@ public class CustomerService {
     private Customer validCreate(Customer customer)  throws ValidatorException {
         if (validator.validString(customer.getName()) && validator.validEmail(customer.getEmail())
                 && validator.validPassword(customer.getPassword())) {
-            if (!this.userEmailExists(customer.getEmail())) {
+            if (!this.customerEmailExists(customer.getEmail())) {
                 customer.setName(customer.getName());
                 customer.setPassword(bCryptPasswordEncoder.encode(customer.getPassword()));
                 customer.setEmail(customer.getEmail());
@@ -95,18 +91,19 @@ public class CustomerService {
     }
 
     private Customer validUpdate(Customer customer, Customer customerUpdate)  throws ValidatorException{
-        if (validator.validString(customerUpdate.getName()) && validator.validEmail(customerUpdate.getEmail())
-                && validator.validPassword(customerUpdate.getPassword())) {
-            customer.setName(customerUpdate.getName());
-            customer.setPassword(customerUpdate.getPassword());
-            customer.setRole(customerUpdate.getRole());
-            customer.setEmail(customerUpdate.getEmail());
+            if(customerUpdate.getName() != null) {
+                customer.setName(customerUpdate.getName());
+            }
+            if(customerUpdate.getPassword() != null) {
+                customer.setPassword(customerUpdate.getPassword());
+            }
+            if(customerUpdate.getRole() != null) {
+                customer.setRole(customerUpdate.getRole());
+            }
+            if(customerUpdate.getEmail() != null) {
+                customer.setEmail(customerUpdate.getEmail());
+            }
             return customer;
-
-        } else {
-            throw new ValidatorException("Email alread exists");
-        }
-
     }
 
     public Book addBookCollection(String email, Book book) throws ValidatorException {

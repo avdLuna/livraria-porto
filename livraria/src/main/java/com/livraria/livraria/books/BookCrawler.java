@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BookCrawler {
-    private static final String API_KEY = "AIzaSyBVVMFGlNDYTCkCWUVZ3vYyj0dpjJF1k8s";
+    private static final String API_KEY = "";
     private static final String BOOK_API_LINK = "https://www.googleapis.com/books/v1/volumes?q=";
 
     private final RestTemplate restTemplate;

@@ -26,7 +26,7 @@ public class BookController {
     @GetMapping("/books/search")
     public ResponseEntity<List<Book>> getCustomer(@RequestHeader("Authorization") String header, @RequestBody Book book) throws ValidatorException, ServletException, JsonProcessingException {
         String email = jwtService.recoverSubjectFromToken(header);
-        if(!customerService.userEmailExists(email)){
+        if(!customerService.customerEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             List<Book> books;
