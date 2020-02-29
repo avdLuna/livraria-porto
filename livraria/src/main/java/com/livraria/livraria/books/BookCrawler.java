@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,8 @@ public class BookCrawler {
         restTemplate = restTemplateBuilder.build();
     }
 
-    public List<Book> getBooksByName(String name) throws JsonProcessingException {
-        String url = BOOK_API_LINK + name + "&key=" + API_KEY;
+    public List<Book> getBooksByName(String title) throws JsonProcessingException {
+        String url = BOOK_API_LINK + title + "&key=" + API_KEY;
         String result = this.restTemplate.getForObject(url, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -38,6 +39,13 @@ public class BookCrawler {
     public List<Book> getBooksByNameAndAuthor(String name, String author){
         String url = BOOK_API_LINK + name + "&inauthor:" + author + "&key=" + API_KEY;
         return this.restTemplate.getForObject(url, List.class);
+    }
+
+    public String getBooksById(String id){
+        byte[] decodedBytesId = Base64.getDecoder().decode(id);
+        String decodedString = new String(decodedBytesId);
+        String url = BOOK_API_LINK + "id=" + id + "&key=" + API_KEY;
+        return this.restTemplate.getForObject(url, String.class);
     }
 
 }

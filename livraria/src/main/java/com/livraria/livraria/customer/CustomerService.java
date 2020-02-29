@@ -1,5 +1,6 @@
 package com.livraria.livraria.customer;
 
+import com.livraria.livraria.books.Book;
 import com.livraria.livraria.util.Validator;
 import com.livraria.livraria.util.ValidatorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,4 +106,9 @@ public class CustomerService {
             return customer;
     }
 
+    public Book addBookCollection(String email, Book book) throws ValidatorException {
+        Customer customer = getCustomerByEmail(email);
+        customer.getBooks().add(book);
+        return book;
+    }
 }

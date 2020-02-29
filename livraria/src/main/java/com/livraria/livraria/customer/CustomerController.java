@@ -1,5 +1,8 @@
 package com.livraria.livraria.customer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.livraria.livraria.books.Book;
+import com.livraria.livraria.books.BookService;
 import com.livraria.livraria.jwt.JwtService;
 import com.livraria.livraria.util.ValidatorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private BookService bookService;
 
     @PostMapping("/customer/create")
     public ResponseEntity<Customer> createUser(@Valid @RequestBody Customer customer)  throws ValidatorException {
@@ -62,6 +67,13 @@ public class CustomerController {
             List<Customer> customers =  customerService.getAllCustomers();
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
+    }
+
+    @PostMapping("/customer/addBook/{id}")
+    public ResponseEntity<Book> addBookToCollection(@RequestHeader("Authorization") String header, @PathVariable("id") String id) throws ServletException, JsonProcessingException, ValidatorException {
+        String email = jwtService.recoverSubjectFromToken(header);
+        Book bSearch = bookService.searchById(id);
+        return new ResponseEntity<>(customerService.addBookCollection(email, bSearch), HttpStatus.CREATED);
     }
 
 }
