@@ -124,6 +124,7 @@ public class CustomerService {
                 booksCustomer.remove(i);
             }
         }
+        customerRepository.save(customer);
         return bSelected;
     }
 
