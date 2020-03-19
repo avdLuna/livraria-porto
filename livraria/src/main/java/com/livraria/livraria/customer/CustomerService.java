@@ -3,7 +3,7 @@ package com.livraria.livraria.customer;
 import com.livraria.livraria.books.Book;
 import com.livraria.livraria.util.Validator;
 import com.livraria.livraria.util.ValidatorException;
-import jdk.nashorn.internal.runtime.OptimisticReturnFilters;
+//import jdk.nashorn.internal.runtime.OptimisticReturnFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
