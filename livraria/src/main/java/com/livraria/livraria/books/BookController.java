@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class BookController {
     private CustomerService customerService;
 
     @GetMapping("/books/search")
-    public ResponseEntity<List<Book>> getCustomer(@RequestHeader("Authorization") String header, @RequestBody Book book) throws ValidatorException, ServletException, JsonProcessingException {
+    public ResponseEntity<List<Book>> getBooks(@RequestHeader("Authorization") String header, @RequestBody Book book) throws ValidatorException, ServletException, JsonProcessingException {
         String email = jwtService.recoverSubjectFromToken(header);
         if(!customerService.customerEmailExists(email)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -38,6 +39,16 @@ public class BookController {
                 books = bookService.searchByName(book.getTitle());
             }
             return new ResponseEntity<>(books, HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/books/{id}/updatePrice")
+    public ResponseEntity<Book> updateBook(@RequestHeader("Authorization") String header,@PathVariable("id") String id,  @RequestBody Book book) throws ServletException, UnsupportedEncodingException, ValidatorException, JsonProcessingException {
+        String email = jwtService.recoverSubjectFromToken(header);
+        if(!customerService.customerEmailExists(email)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<Book>(this.bookService.updateBook(id, book),HttpStatus.OK);
         }
     }
 

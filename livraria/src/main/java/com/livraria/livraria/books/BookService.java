@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
+import com.livraria.livraria.customer.CustomerRepository;
 import com.livraria.livraria.util.Validator;
 import com.livraria.livraria.util.ValidatorException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ import java.util.List;
 public class BookService {
     private BookCrawler crawler = new BookCrawler(new RestTemplateBuilder());
     private Validator validator = new Validator();
+
+    @Autowired
+    private BookRepository bookRepository;
 
     public List<Book> searchByName(String name) throws ValidatorException, JsonProcessingException {
         if(validator.validString(name)){
@@ -58,5 +63,18 @@ public class BookService {
 
         return book;
     }
+
+    public Book updateBook(String id, Book book) throws UnsupportedEncodingException, JsonProcessingException, ValidatorException {
+
+        Book bSearch = this.searchById(id);
+
+        if(validator.validValue(book.getPrice())) {
+            bSearch.setPrice(book.getPrice());
+        }
+
+        return this.searchById(id);
+
+    }
+
 
 }

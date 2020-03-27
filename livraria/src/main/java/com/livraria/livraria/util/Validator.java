@@ -1,6 +1,7 @@
 package com.livraria.livraria.util;
 
 public class Validator {
+
     public boolean validString(String word) throws ValidatorException{
         if (word.equals("")) {
             throw new ValidatorException("String: " + word + " is empty.");
