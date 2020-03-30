@@ -1,6 +1,7 @@
 package com.livraria.livraria.customer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.livraria.livraria.address.Address;
 import com.livraria.livraria.books.Book;
 import com.livraria.livraria.util.CustomerRole;
 import org.springframework.data.annotation.Id;
@@ -28,6 +29,8 @@ public class Customer implements Serializable {
     private CustomerRole role;
 
     private List<Book> books = new ArrayList<>();
+
+    private List<Address> adresses = new ArrayList<>();
 
     public Customer(String name, String email, String password) {
         this.name = name;
@@ -88,6 +91,10 @@ public class Customer implements Serializable {
     public void setBooks(List<Book> books) {
         this.books = books;
     }
+
+    public List<Address> getAdresses() { return adresses; }
+
+    public void setAdresses(List<Address> adresses) { this.adresses = adresses; }
 
     @Override
     public String toString() {
