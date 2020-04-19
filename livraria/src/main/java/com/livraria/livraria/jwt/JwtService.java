@@ -23,9 +23,10 @@ public class JwtService {
         this.customerService = customerService;
     }
 
-    public String generateToken(String email){
+    public String generateToken(String email, Object customer){
         String token = Jwts.builder()
                             .setSubject(email)
+                            .claim("user", customer)
                             .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
                             .setExpiration(new Date(System.currentTimeMillis() + 100 * 60 * 1000))
                             .compact();
