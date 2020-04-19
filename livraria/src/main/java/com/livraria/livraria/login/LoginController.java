@@ -25,14 +25,16 @@ public class LoginController {
             if(!bCryptPasswordEncoder.matches(customer.getPassword(), customerAux.getPassword())){
                 throw new ServletException("Invalid password");
             }
+            customerAux.setPassword(null);
+            customerAux.setBooks(null);
+            customerAux.setAdresses(null);
+            String generatedToken = this.jwtService.generateToken(customer.getEmail(), customerAux);
+            LoginResponse loginResponse =  new LoginResponse(generatedToken);
+            return loginResponse;
         } catch (ValidatorException | ServletException e) {
             e.printStackTrace();
         }
-
-        String generatedToken = this.jwtService.generateToken(customer.getEmail());
-        LoginResponse loginResponse =  new LoginResponse(generatedToken);
-        System.out.println(loginResponse.toString());
-        return loginResponse;
+        return new LoginResponse(null);
     }
 
     private class LoginResponse {
